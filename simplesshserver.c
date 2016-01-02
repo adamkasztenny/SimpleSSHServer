@@ -12,11 +12,11 @@ int main(int argc, char *argv[])
 {
 
     if (argc < 2) {
-        printf("usage: %s port\n", argv[0]);
+        printf("usage: %s host port\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
-    int port = atoi(argv[1]);
+    int port = atoi(argv[2]);
 
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port); 
-    addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+    addr.sin_addr.s_addr = htonl(atoi(argv[1]));
     if (bind(sockfd, (struct sockaddr *) &addr, sizeof (addr)) < 0) {
         perror("bind");
         close(sockfd);
@@ -95,9 +95,6 @@ int main(int argc, char *argv[])
 	    } while(read_from_call > 0);
 	}
     }
-
-    printf("bind complete, now waiting\n");
-    fgetc(stdin);
 
     printf("done\n");
 
